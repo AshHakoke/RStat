@@ -32,39 +32,47 @@
 
 </head>
 <body>
-<input type="text" name="daterange" th:value="${data}" th:object="${dateRange}">
+<!--<input type="text" name="daterange" th:value="${data}" th:object="${dateRange}">-->
+
+
 
 <form method="post" id="dateRage" th:object="${dateRange}">
     <input type="hidden" name="dateFrom" value="" readonly>
     <input type="hidden" name="dateTo" value="" readonly>
 </form>
 
-<div th:switch="${pilots}" class="container-fluid">
+<div class="container-fluid" style="max-width: 1920px">
     <div class="row">
         <div class="col">
-            <h2 th:case="null">No users yet!</h2>
-            <div th:case="*" class="card mb">
+            <div th:switch="${pilots}"  class="card mb">
                 <div class="card-header">
-                    <h2 class="card-title">Pilots</h2>
+                    <div class="row">
+                        <div class="col">
+                            <h2>Pilots</h2>
+                        </div>
+                        <div class="col">
+                            <input class="float-right" type="text" name="daterange" th:value="${data}" th:object="${dateRange}">
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <table data-toggle="table" data-sortable="true" class="mytable table table-striped table-responsive-md">
+                    <table data-toggle="table" data-sort-name="duration" data-sort-order="desc" data-sortable="true" class="mytable table table-striped table-responsive-md">
                         <thead>
                         <tr>
-                            <th data-field="name" data-sortable="true" scope="col">MainPilotName</th>
-                            <th data-sortable="true" scope="col">Workers Count</th>
-                            <th data-sortable="true" scope="col">Jobs</th>
-                            <th data-sortable="true" scope="col">AverageDuration</th>
-                            <th data-sortable="true" style="width: 10%" scope="col">Duration</th>
+                            <th data-field="name" data-width="300" data-sortable="true">MainPilotName</th>
+                            <th data-field="workers" data-sortable="true" data-width="100" >Workers Count</th>
+                            <th data-field="jobs" data-sortable="true" data-width="100" >Jobs</th>
+                            <th data-field="average" data-sortable="true" data-width="100" >AverageDuration</th>
+                            <th data-field="duration" data-sortable="true" data-width="300" >Duration</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="pilot : ${pilots}" th:with="maxDuration=${pilots[0].getDurationSummary()}">
-                            <th scope="row" th:text="${pilot.mainPilotName}"></th>
+                            <th th:text="${pilot.mainPilotName}"></th>
                             <td th:text="${pilot.workersCount}"></td>
                             <td th:text="${pilot.getJobsSummary()}"></td>
                             <td th:text="${pilot.averageDuration}"></td>
-                            <td style="width: 10%">
+                            <td >
                                 <div class="progress"
                                      th:with="value=((${pilot.getDurationSummary()} / ${maxDuration})*100)">
                                     <div class="progress-bar" role="progressbar"
@@ -83,25 +91,71 @@
 </div>
 
 <br>
-<div class="container-fluid">
+<div class="container-fluid" style="max-width: 1920px">
     <div class="row">
         <div class="col-3">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Reaction</h5>
+                    <h5 class="card-title">Industry</h5>
                 </div>
                 <div class="card-body">
-                    <table class="table">
+                    <table data-toggle="table" data-sort-name="duration" data-sort-order="desc" data-sortable="true" class="table mytable">
                         <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Duration</th>
+                            <th data-field="name" data-sortable="true" scope="col">Name</th>
+                            <th data-field="duration" data-sortable="true" scope="col">Duration</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="pilot : ${pilots}">
                             <th scope="row" th:text="${pilot.mainPilotName}"></th>
-                            <td th:text="${pilot.reactionDuration}"></td>
+                            <td th:text="${pilot.inventionDuration}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">MeTe</h5>
+                </div>
+                <div class="card-body">
+                    <table data-toggle="table" data-sort-name="duration" data-sort-order="desc" data-sortable="true" class="table mytable">
+                        <thead>
+                        <tr>
+                            <th data-field="name" data-sortable="true" scope="col">Name</th>
+                            <th data-field="duration" data-sortable="true" scope="col">Duration</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="pilot : ${pilots}">
+                            <th scope="row" th:text="${pilot.mainPilotName}"></th>
+                            <td th:text="${pilot.meteDuration}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Invention</h5>
+                </div>
+                <div class="card-body">
+                    <table data-toggle="table" data-sort-name="duration" data-sort-order="desc" data-sortable="true" class="table mytable">
+                        <thead>
+                        <tr>
+                            <th data-field="name" data-sortable="true" scope="col">Name</th>
+                            <th data-field="duration" data-sortable="true" scope="col">Duration</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="pilot : ${pilots}">
+                            <th scope="row" th:text="${pilot.mainPilotName}"></th>
+                            <td th:text="${pilot.inventionDuration}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -114,57 +168,11 @@
                     <h5 class="card-title">Reaction</h5>
                 </div>
                 <div class="card-body">
-                    <table class="table">
+                    <table data-toggle="table" data-sort-name="duration" data-sort-order="desc" data-sortable="true" class="table mytable">
                         <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Duration</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="pilot : ${pilots}">
-                            <th scope="row" th:text="${pilot.mainPilotName}"></th>
-                            <td th:text="${pilot.reactionDuration}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Reaction</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Duration</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="pilot : ${pilots}">
-                            <th scope="row" th:text="${pilot.mainPilotName}"></th>
-                            <td th:text="${pilot.reactionDuration}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Reaction</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Duration</th>
+                            <th data-field="name" data-sortable="true" scope="col">Name</th>
+                            <th data-field="duration" data-sortable="true" scope="col">Duration</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -179,6 +187,7 @@
         </div>
     </div>
 </div>
+
     <script>
         // $(function() {
         $(document).ready(function () {
