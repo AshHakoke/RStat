@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Pilots Industry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/shards.min.css">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+
+    <style>
+
+        table.mytable tbody tr td:nth-child(2),
+        table.mytable tbody tr td:nth-child(3),
+        table.mytable tbody tr td:nth-child(4),
+        table.mytable tbody tr td:nth-child(5) {
+            text-align: right;
+        }
+    </style>
+
+</head>
+<body>
+<input type="text" name="daterange" th:value="${data}" th:object="${dateRange}">
+
+<form method="post" id="dateRage" th:object="${dateRange}">
+    <input type="hidden" name="dateFrom" value="" readonly>
+    <input type="hidden" name="dateTo" value="" readonly>
+</form>
+
+<div th:switch="${pilots}" class="container">
+    <div class="row">
+        <h2 th:case="null">No users yet!</h2>
+        <div th:case="*" class="card mb">
+            <div class="card-header">
+                <h2 class="card-title">Pilots</h2>
+            </div>
+            <div class="card-body">
+                <table class="mytable table table-striped table-responsive-md">
+                    <thead>
+                    <tr>
+                        <th class="col-4" scope="col">MainPilotName</th>
+                        <th class="col-2" scope="col">Workers Count</th>
+                        <th class="col-2" scope="col">Jobs</th>
+                        <th class="col-2" scope="col">AverageDuration</th>
+                        <th class="col-6" scope="col">Duration</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="pilot : ${pilots}" th:with="maxDuration=${pilots[0].getDurationSummary()}">
+                        <th class="col-4" scope="row" th:text="${pilot.mainPilotName}"></th>
+                        <td class="col-2" th:text="${pilot.workersCount}"></td>
+                        <td class="col-2" th:text="${pilot.getJobsSummary()}"></td>
+                        <td class="col-2" th:text="${pilot.averageDuration}"></td>
+                        <td class="col-6">
+                            <div class="progress"
+                                 th:with="value=((${pilot.getDurationSummary()} / ${maxDuration})*100)">
+                                <div class="progress-bar" role="progressbar"
+                                     th:style="'width: '+${#numbers.formatDecimal(value,3,2,'POINT')}+'%'"
+                                     th:aria-valuenow="${#numbers.formatDecimal(value,3,2,'POINT')}" aria-valuemin="0"
+                                     aria-valuemax="100" th:text="${pilots[0].getDurationSummary()}"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Industry</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Duration</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="pilot : ${pilots}">
+                            <th scope="row" th:text="${pilot.mainPilotName}"></th>
+                            <td th:text="${pilot.industryDuration}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">MeTe</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Duration</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="pilot : ${pilots}">
+                                <th scope="row" th:text="${pilot.mainPilotName}"></th>
+                                <td th:text="${pilot.meteDuration}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Invention</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Duration</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="pilot : ${pilots}">
+                                <th scope="row" th:text="${pilot.mainPilotName}"></th>
+                                <td th:text="${pilot.inventionDuration}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Reaction</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Duration</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="pilot : ${pilots}">
+                                <th scope="row" th:text="${pilot.mainPilotName}"></th>
+                                <td th:text="${pilot.reactionDuration}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        // $(function() {
+        $(document).ready(function () {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left',
+                autoUpdateInput: true
+            }, function (start, end, label) {
+                $('input[name="dateFrom"]').val(start.format('DD/MM/YYYY'));
+                $('input[name="dateTo"]').val(end.format('DD/MM/YYYY'));
+                // $('#daterange').data('daterangepicker').setStartDate(start);
+                // $('#daterange').data('daterangepicker').setEndDate(end);
+                $('form[id="dateRage"]').submit();
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+
+        });
+    </script>
+
+</body>
+</html>
