@@ -1,4 +1,4 @@
-package com.example.rstatistic;
+package com.example.rstatistic.pilotsIndustry;
 
 import jakarta.persistence.*;
 import lombok.*;

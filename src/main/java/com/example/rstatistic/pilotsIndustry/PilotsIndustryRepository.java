@@ -1,4 +1,4 @@
-package com.example.rstatistic;
+package com.example.rstatistic.pilotsIndustry;
 
 import java.sql.Date;
 import java.util.List;

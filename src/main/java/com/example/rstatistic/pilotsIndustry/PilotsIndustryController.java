@@ -1,10 +1,12 @@
-package com.example.rstatistic;
+package com.example.rstatistic.pilotsIndustry;
 
+import com.example.rstatistic.utils.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -23,11 +25,10 @@ public class PilotsIndustryController {
         this.pilotsIndustryRepository = pilotsIndustryRepository;
     }
 
-    @GetMapping("/index")
+    @GetMapping("/pilotsindustry")
     public String showUserList(Model model) {
 
-        List<PilotsIndustryEntity> pilots = pilotsIndustryRepository.findAllByEndDateBetweenOrderByIdMainPilotNameAsc(Date.valueOf("2024-03-11"), Date.valueOf(LocalDate.now()));
-
+        List<PilotsIndustryEntity> pilots = pilotsIndustryRepository.findAllByEndDateBetweenOrderByIdMainPilotNameAsc(Date.valueOf(LocalDate.now().withDayOfMonth(1)), Date.valueOf(LocalDate.now()));
 
         List<PilotsIndustrySummaryByName> values = parsePilotsData(pilots);
 
@@ -36,7 +37,7 @@ public class PilotsIndustryController {
         System.out.println(timeColonFormatter.format(LocalDate.now().withDayOfMonth(1)) + " - " + timeColonFormatter.format(LocalDate.now()));
         model.addAttribute("pilots", values);
         model.addAttribute("data",timeColonFormatter.format(LocalDate.now().withDayOfMonth(1)) + " - " + timeColonFormatter.format(LocalDate.now()));
-        return "index";
+        return "pilotsindustry";
     }
 
     private List<PilotsIndustrySummaryByName> parsePilotsData(List<PilotsIndustryEntity> pilots) {
@@ -66,10 +67,9 @@ public class PilotsIndustryController {
         List<PilotsIndustrySummaryByName> values = new ArrayList<>(data.values().stream().toList());
         values.sort(PilotsIndustrySummaryByName.Comparators.DURATION);
         return values;
-
     }
 
-    @PostMapping("/index")
+    @PostMapping("/pilotsindustry")
     public String dateChange(DateRange dateRange, Model model) {
         System.out.println(dateRange.getDateTo()+" "+dateRange.getDateFrom());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -84,7 +84,7 @@ public class PilotsIndustryController {
         model.addAttribute("pilots", values);
         dateFormat = new SimpleDateFormat("MM/dd/YYYY");
         model.addAttribute("data",dateFormat.format(dateRange.getDateFrom()) + " - " + dateFormat.format(dateRange.getDateTo()));
-        return "index";
+        return "pilotsindustry";
     }
 
 }

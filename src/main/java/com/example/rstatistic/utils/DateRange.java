@@ -1,4 +1,4 @@
-package com.example.rstatistic;
+package com.example.rstatistic.utils;
 
 import java.util.Date;
 

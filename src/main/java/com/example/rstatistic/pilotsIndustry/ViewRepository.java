@@ -1,4 +1,4 @@
-package com.example.rstatistic;
+package com.example.rstatistic.pilotsIndustry;
 
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
